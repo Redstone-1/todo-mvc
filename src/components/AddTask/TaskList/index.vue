@@ -1,23 +1,21 @@
 <template>
-  <div class="listContainer">
-    <!-- 任务列表 -->
-    <div class="taskList">
-      <ul class="taskUl">
-        <li 
-          class="taskList" 
-          v-for="(item, index, id) of task" 
-          :key="id" @click="chosenOrNot(index)">
-          <i 
-            v-if="task[index].chosen || chooseAll" 
-            class="iconfont icon-xuanzhong taskChosen"></i>
-          <i 
-            v-else-if="!task[index].chosen || chooseAll" 
-            class="iconfont icon-weixuanzhong taskChosen"></i>
-            {{ item.taskName }}
-          <button class="iconfont icon-cha deleteBtn" @click.stop="deleteTaskItem(index)"></button>
-        </li>
-      </ul>
-    </div>
+  <!-- 任务列表 -->
+  <div class="taskList">
+    <ul class="taskUl">
+      <li 
+        class="taskLi" 
+        v-for="(item, index, id) of task" 
+        :key="id" @click="chosenOrNot(index)">
+        <i 
+          v-if="task[index].chosen || chooseAll" 
+          class="iconfont icon-xuanzhong taskChosen"></i>
+        <i 
+          v-else-if="!task[index].chosen || chooseAll" 
+          class="iconfont icon-weixuanzhong taskChosen"></i>
+          {{ item.taskName }}
+        <button class="iconfont icon-cha deleteBtn" @click.stop="deleteTaskItem(index)"></button>
+      </li>
+    </ul>
   </div>
 </template>
 <script>
@@ -33,7 +31,7 @@
     },
     methods: {
       deleteTaskItem(index) {
-        this.task.splice(this.task.findIndex(item => item.index === index), 1)
+        this.task.splice(this.task.findIndex(item => item.index === index), 1) // 点击删除按钮删除任务
       }
     },
     computed: {
@@ -47,8 +45,25 @@
   }
 </script>
 <style lang='scss' scoped>
-
-.deleteBtn {
-  z-index: 1;
+.taskList {
+  width: 100%;
+  height: 100%;
+  .taskUl {
+    padding: 0 0 15px 20px;
+    .taskLi {
+      padding: 12px 0 12px 0;
+      position: relative;
+    }
+    .deleteBtn {
+      width: 30px;
+      height: 30px;
+      border: 0px;
+      background-color: #536162;
+      color: #fff;
+      border-radius: 2px;
+      position: absolute;
+      right: 30px;
+    }
+  }
 }
 </style>

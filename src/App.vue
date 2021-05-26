@@ -1,20 +1,28 @@
 <template>
   <div id="app">
-    <add-task />
+    <Header />
+    <AddTask />
   </div>
 </template>
 
 <script>
 import AddTask from './components/AddTask/index.vue'
+import Header from './components/Header'
 
 export default {
   name: "App",
   components: {
-    AddTask
+    AddTask,
+    Header
   },
 };
 </script>
 
 <style lang="scss">
-
+body {
+  background-color: #d5dbb3;
+  #app {
+    height: 100%;
+  }
+}
 </style>
