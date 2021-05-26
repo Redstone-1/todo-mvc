@@ -1,7 +1,7 @@
 # exercises-1
 
 ## TodoList
-前端TEC，MVVM 练习题一 
+前端TEC，MVVM 练习题一
 
 ## Project setup
 ```
