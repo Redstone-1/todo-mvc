@@ -14,7 +14,7 @@
             v-else-if="!task[index].chosen || chooseAll" 
             class="iconfont icon-weixuanzhong taskChosen"></i>
             {{ item.taskName }}
-          <button class="iconfont icon-cha"></button>
+          <button class="iconfont icon-cha deleteBtn" @click.stop="deleteTaskItem(index)"></button>
         </li>
       </ul>
     </div>
@@ -32,6 +32,9 @@
       }
     },
     methods: {
+      deleteTaskItem(index) {
+        this.task.splice(this.task.findIndex(item => item.index === index), 1)
+      }
     },
     computed: {
       // 添加单项任务的选中事件，chosen为true表示选中，为false表示未选中
@@ -44,4 +47,8 @@
   }
 </script>
 <style lang='scss' scoped>
+
+.deleteBtn {
+  z-index: 1;
+}
 </style>
