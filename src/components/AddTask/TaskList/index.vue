@@ -30,8 +30,8 @@
       }
     },
     methods: {
-      deleteTaskItem(index) {
-        this.task.splice(this.task.findIndex(item => item.index === index), 1) // 点击删除按钮删除任务
+      deleteTaskItem(idx) {
+        this.task.splice(this.task.findIndex((item, index) => index === idx), 1) // 点击删除按钮删除任务
       }
     },
     computed: {
