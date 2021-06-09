@@ -1,18 +1,16 @@
 <template>
   <div id="app">
     <Header />
-    <AddTask />
+    <router-view />
   </div>
 </template>
 
 <script>
-import AddTask from './components/AddTask/index.vue'
 import Header from './components/Header'
 
 export default {
   name: "App",
   components: {
-    AddTask,
     Header
   },
 };

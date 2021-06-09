@@ -5,12 +5,14 @@
       <!-- 下箭头，全选功能 -->
       <i 
         class="iconfont icon-arrow-down chooseAll" 
-        @click.stop="chooseAllTasks"></i>
+        @click.prevent="chooseAllTasks"
+        @dblclick.prevent="cancelChooseAll"
+        ></i>
       <!-- input输入框，用户任务名 -->
       <input 
+        type="text"
         class="taskInput"
-        :value="value" 
-        ref="addTaskInput"
+        v-model="taskName"
         autofocus
         placeholder="添加您的任务"
       />
@@ -18,76 +20,61 @@
       <button class="addTaskBtn" @click="addTask">添加任务</button>
     </div>
     <!-- 任务列表组件 -->
-    <TaskList
-      v-show="allTaskShow" 
-      :task="list" 
-      :chooseAll="chooseAll">
-    </TaskList>
-    <TaskList
-      v-show="!allTaskShow" 
-      :task="compList" 
-      :chooseAll="chooseAll">
-    </TaskList>
+    <router-view />
     <TaskTabs
+      v-if="taskList.length"
       :chooseAll="chooseAll"
-      :task="list" 
-      @receiveCompTask="receiveCompTask"
-      @clearAllTask="clearAllTask"
     />
   </div>
 </template>
 <script>
-import TaskList from './TaskList'
+import { mapState } from 'vuex'
 import TaskTabs from './TaskTabs'
 
 export default {
   components: {
-    TaskList,
+    // TaskList,
     TaskTabs,
   },
   data() {
     return {
       // input输入框的值
-      value: '',
-      // 任务列表
-      list: [],
-      compList: [],
+      taskName: '',
       // 是否全选
       chooseAll: false,
-      allTaskShow: true
     }
   },
   methods: {
     // 添加任务按钮的事件
     addTask() {
-      // 使用ref获得input输入框的值
-      let inputValue = this.$refs.addTaskInput.value
-      let d = new Date()
-      let newTask = { id: 0, taskName: '', chosen: false }
-      // 判断输入框是否有值，有值则添加任务
-      if(inputValue) {
-        newTask.id = d.getSeconds() + d.getMilliseconds()
-        newTask.taskName = inputValue
-        this.list.push(newTask)
-      }
+      let id = 0
+      this.$store.commit('addTask', {
+        id: id++,
+        name: this.taskName,
+        chosen: false
+      })
+      this.taskName = ''
     },
-    clearAllTask() {
-      this.list.splice(0, this.list.length)
-    }
+    // clearAllTask() {
+    //   this.list.splice(0, this.list.length)
+    // }
   },
   computed: {
-    chooseAllTasks() {
+    ...mapState(['taskList']),
+    chooseAllTasks () {
       return function chooseAll() {
-        this.chooseAll = !this.chooseAll
+        this.taskList.forEach(ele => {
+            ele.chosen = true
+        });
       }
     },
-    receiveCompTask() {
-      let that = this
-      return function rcvCompTask(e) {
-        that.compList = e
-        that.allTaskShow = !that.allTaskShow
+    cancelChooseAll () {
+       return function  cancelChoose() {
+        this.taskList.forEach(ele => {
+          ele.chosen = false
+        });
       }
-    },
+    }
   },
 }
 </script>

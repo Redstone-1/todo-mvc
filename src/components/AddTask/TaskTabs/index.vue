@@ -1,27 +1,26 @@
 <template>
   <div class="taskTabsContainer">
-    <button 
-      class="completedTask"
-      @click="sendCompTask" 
-      @mouseenter="completedFilter"
+    <div
+      v-for="tab in tabsType"
+      :key="tab.value"
+      class="tabs"
     >
-      All / Completed
-    </button>
+      <router-link :to=" '/' + tab " class="tabs-link">{{ tab.toUpperCase().slice(0, 1) + tab.slice(1) }}</router-link>
+    </div>
     <button
       class="AllCompletedTask"
-      @click="deleteAllTask"
+      @click="clearCompTask"
     >
-      ClearAllTask
+      ClearCompTask
     </button>
+    <span class="leftTask">{{leftTask + `-${leftTask === 1? 'item':'items'}-left`}}</span>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
-    task: {
-      type: Array,
-      required: true,
-    },
     chooseAll: {
       type: Boolean,
       required: true,
@@ -29,49 +28,44 @@ export default {
   },
   data () {
     return {
-      compTask: Array // 已经完成的任务
     }
   },
   methods: {
-    sendCompTask() {
-      this.$emit('receiveCompTask', this.compTask) // emit已经完成的任务
-    },
-    deleteAllTask() {
-      this.$emit('clearAllTask') // 删除全部任务
+    clearCompTask () {
+      this.$store.commit('deleteCompTask')
     }
   },
   computed: {
-    // 过滤已经完成的任务
-    completedFilter() {
-      let that = this
-      return function compFilter() {
-        // 如果没有点击全选按钮，过滤chosen为true的任务项
-        if(that.chooseAll === false) {
-          that.compTask = that.task.filter(taskItem => taskItem.chosen)
-        } else {
-          // 如果点击了全选按钮，将全部task赋给compTask
-          that.compTask = that.task
-        }
-      }
-    }
-  },
+    ...mapState(['tabsType', 'leftTask'])
+  }
 }
 </script>
 <style lang='scss' scoped>
 .taskTabsContainer {
   width: 100%;
   height: 30px;
-  .completedTask {
-    width: 110px;
-    height: 24px;
+  .tabs {
+    display: inline-block;
+    height: 23px;
     border: 0px;
     background-color: #536162;
     color: #fff;
     border-radius: 2px;
     margin-left: 20px;
+    box-sizing: border-box;
     &:hover {
       cursor: pointer;
       color: #f98404;
+    }
+    .tabs-link {
+      color: #fff;
+      font-size: 12px;
+      text-decoration: none;
+      padding: 4px 4px 0 4px;
+      &:hover {
+        cursor: pointer;
+        color: #f98404;
+      }
     }
   }
   .AllCompletedTask {
@@ -86,6 +80,11 @@ export default {
       cursor: pointer;
       color: #f98404;
     }
+  }
+  .leftTask {
+    color: crimson;
+    margin-left: 20px;
+    font-size: 14px;
   }
 }
 </style>
